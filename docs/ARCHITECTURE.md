@@ -9,11 +9,13 @@
 | id | String (UUID) | Primary key |
 | createdAt | DateTime | Auto-set |
 | updatedAt | DateTime | Auto-updated |
-| residentName | String | Medicaid resident |
-| facilityName | String | Care facility |
+| residentName | String | Medicaid resident (PHI) |
+| facilityName | String | Care facility (PHI) |
 | status | String | Default: `DRAFT`. Values: DRAFT, IN_PROGRESS, SUBMITTED, APPROVED, DENIED |
+| ownerId | String | Default: `system`. Used for row-level access control (IDOR prevention) |
 
 Relations: `Case` has many `FinancialTransaction` (cascade delete).
+Indexes: ownerId.
 
 ### FinancialTransaction
 
@@ -41,20 +43,51 @@ Relations: `Case` has many `FinancialTransaction` (cascade delete).
 - Transfers: INTERNAL_TRANSFER, EXTERNAL_TRANSFER, ATM_WITHDRAWAL, CHECK, DEPOSIT
 - Other: GROCERIES, MEDICAL, ENTERTAINMENT, OTHER, UNCATEGORIZED
 
+### AuditLog
+
+| Field | Type | Notes |
+|-------|------|-------|
+| id | String (UUID) | Primary key |
+| createdAt | DateTime | Auto-set |
+| userId | String | Authenticated user's email |
+| action | String | LIST, READ, UPDATE, BULK_UPDATE |
+| resourceType | String | Case, FinancialTransaction |
+| resourceId | String | The resource ID(s) accessed |
+| ipAddress | String? | Client IP from X-Forwarded-For |
+
+Indexes: userId, (resourceType + resourceId).
+
+## Authentication and Authorization
+
+### Authentication (`src/lib/auth.ts`, `src/middleware.ts`)
+
+NextAuth.js with CredentialsProvider (demo only). JWT session strategy. Middleware protects all `/api/cases/*`, `/api/transactions/*`, `/api/workflows/*`, `/transactions/*`, `/workflows/*` routes.
+
+### Authorization (IDOR Prevention)
+
+Every API route that returns PHI calls `getServerSession(authOptions)` and scopes Prisma queries to `case: { ownerId: session.user.email }`. This prevents users from accessing cases belonging to other users even if they know the resource ID.
+
+### Audit Logging (`src/lib/audit.ts`)
+
+`logAccess(request, session, action, resourceType, resourceId)` writes to the AuditLog table after every PHI access. Captures the client IP from `X-Forwarded-For`.
+
 ## API Routes
 
-| Method | Path | Purpose | Input | Output |
-|--------|------|---------|-------|--------|
-| GET | `/api/cases` | List all cases | — | `Case[]` |
-| GET | `/api/transactions?caseId=` | List transactions for a case | `caseId` query param (required) | `FinancialTransaction[]` |
-| GET | `/api/transactions/:id` | Get single transaction | URL param `id` | `FinancialTransaction` |
-| PATCH | `/api/transactions/:id` | Update single transaction | JSON body: `{ category?, isReviewed?, isFlagged?, flagReason?, reviewNote? }` | Updated `FinancialTransaction` |
-| PATCH | `/api/transactions/bulk` | Bulk update transactions | JSON body: `{ ids: string[], updates: { category?, isReviewed?, isFlagged? } }` | `{ message, results }` |
-| GET | `/api/transactions/stats?caseId=` | Aggregated stats for a case | `caseId` query param (required) | `{ total, reviewed, flagged, uncategorized, income, expenses, byCategory }` |
-| GET | `/api/workflows` | List all workflow runs | — | `WorkflowRun[]` |
-| POST | `/api/workflows` | Execute a new workflow | — | `WorkflowRun` |
-| GET | `/api/workflows/:id` | Get specific workflow run | URL param `id` | `WorkflowRun` |
-| POST | `/api/workflows/clear` | Clear all workflow history | — | `{ message }` |
+All routes below require authentication (enforced by middleware). PHI routes also enforce ownership scoping.
+
+| Method | Path | Auth | IDOR | Audit | Purpose |
+|--------|------|------|------|-------|---------|
+| GET/POST | `/api/auth/*` | Public | — | — | NextAuth login/logout/session |
+| GET | `/api/cases` | Yes | ownerId | Yes | List user's cases |
+| GET | `/api/transactions?caseId=` | Yes | ownerId | Yes | List transactions (paginated) |
+| GET | `/api/transactions/:id` | Yes | ownerId | Yes | Get single transaction |
+| PATCH | `/api/transactions/:id` | Yes | ownerId | Yes | Update transaction |
+| PATCH | `/api/transactions/bulk` | Yes | ownerId | Yes | Bulk update transactions |
+| GET | `/api/transactions/stats?caseId=` | Yes | ownerId | — | Aggregated stats |
+| GET | `/api/workflows` | Yes | — | — | List workflow runs |
+| POST | `/api/workflows` | Yes | — | — | Execute workflow |
+| GET | `/api/workflows/:id` | Yes | — | — | Get workflow run |
+| POST | `/api/workflows/clear` | Yes | — | — | Clear workflow history |
 
 ## Workflow Engine
 
@@ -70,7 +103,7 @@ Relations: `Case` has many `FinancialTransaction` (cascade delete).
 
 ### WorkflowExecutor (`src/lib/workflow/executor.ts`)
 
-Class that executes a `WorkflowDefinition` step-by-step in sequence. Each step receives the shared context and can merge data into it via `result.data`. On any step failure, the executor throws immediately and marks the workflow as `FAILED`.
+Class that executes a `WorkflowDefinition` step-by-step in sequence. Each step receives the shared context and can merge data into it via `result.data`. Steps marked `retryable: true` are wrapped in `withRetry` (up to 3 retries with exponential backoff). On final failure, the executor marks the workflow as `FAILED`.
 
 ### WorkflowStore (`src/lib/workflow/store.ts`)
 
@@ -114,6 +147,29 @@ app/
 ```
 
 UI primitives in `src/components/ui/`: Badge, Button, Card, Checkbox, Input, Progress, Select, Tabs — all Radix-based, shadcn-style.
+
+## Security Architecture
+
+### Request Flow
+
+```
+Client → Middleware (auth check) → Route Handler → getServerSession → IDOR scope → Prisma → Audit Log
+```
+
+### Security Headers (next.config.ts)
+
+All responses include: HSTS, X-Frame-Options: DENY, X-Content-Type-Options: nosniff, strict Referrer-Policy, Permissions-Policy (camera/mic/geo disabled).
+
+### Error Handling
+
+All API catch blocks return `{ error: "Internal server error" }` with status 500. Raw errors are logged server-side only (`console.error("[Internal]", error)`) and never exposed to clients.
+
+### Input Validation
+
+- All inputs validated with Zod schemas
+- `flagReason` max 500 chars, `reviewNote` max 2000 chars
+- Bulk `ids` array requires min 1 element
+- Category must be a valid enum value
 
 ## Known Bugs (Pre-Fix)
 

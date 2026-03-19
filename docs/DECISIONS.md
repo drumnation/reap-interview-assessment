@@ -107,3 +107,76 @@
 - Circuit breaker: Would be appropriate if the services had sustained outages, not random transient failures
 
 **Files changed**: `src/lib/workflow/executor.ts`
+
+## D009: CredentialsProvider for Demo Authentication
+
+**Decision**: Use NextAuth.js CredentialsProvider reading from environment variables, not a real IdP.
+
+**Context**: The assessment needs authentication to demonstrate HIPAA awareness, but setting up SAML/OIDC with an external IdP is out of scope. CredentialsProvider with `TEST_USERNAME` / `TEST_PASSWORD` shows the pattern without infrastructure dependencies.
+
+**Alternatives**:
+- No auth: Fails HIPAA requirement for access control on PHI
+- OAuth with GitHub/Google: Not appropriate for a Medicaid case management app — real users would use enterprise SSO
+- Basic HTTP auth: No session management, no middleware integration
+
+**Production requirement**: Replace with SAML/OIDC provider (Okta, Azure AD). The CredentialsProvider must not be used in production — it has no MFA, no password hashing, no account lockout.
+
+**Files changed**: `src/lib/auth.ts`, `src/app/api/auth/[...nextauth]/route.ts`, `src/middleware.ts`
+
+## D010: Row-Level Access Control via Case.ownerId
+
+**Decision**: Add `ownerId` field to Case model and scope every PHI query to `case: { ownerId: session.user.email }`.
+
+**Context**: Without ownership scoping, any authenticated user can access any case's transactions by guessing IDs (IDOR vulnerability). This is a HIPAA violation — users must only see their assigned cases.
+
+**Alternatives**:
+- Role-based access only (no row-level): Insufficient — case workers should only see their cases, not all cases
+- Separate tenant databases: Overkill for this scale
+- Prisma middleware for automatic scoping: Cleaner but harder to audit — explicit scoping in each route makes the authorization check visible in code review
+
+**Trade-off**: `ownerId` defaults to `"system"` for backward compatibility with existing seeded data. In production, this would be set to the creating user's ID. The `findUnique` calls were changed to `findFirst` to support the compound where clause (ownership + ID).
+
+**Performance note**: Added index on `ownerId` to avoid full table scans on the ownership filter.
+
+**Files changed**: `prisma/schema.prisma`, all PHI API routes
+
+## D011: Audit Logging on PHI Access
+
+**Decision**: Log every PHI access (LIST, READ, UPDATE, BULK_UPDATE) to an AuditLog table with userId, action, resourceType, resourceId, and client IP.
+
+**Context**: HIPAA requires audit controls — a record of who accessed what PHI and when. This is non-negotiable for compliance.
+
+**Alternatives**:
+- Application logs only: Not queryable, not structured, gets mixed with debug output
+- External audit service (Datadog, Splunk): Better for production, but adds external dependency
+- Database triggers: Would capture all DB access but harder to correlate with user sessions
+
+**Trade-off**: Audit logging adds a write to every PHI request. For this SQLite assessment app, the overhead is negligible. In production with PostgreSQL, the audit table should be append-only (no UPDATE/DELETE permissions) and potentially moved to a separate database to prevent tampering.
+
+**Files changed**: `prisma/schema.prisma`, `src/lib/audit.ts`, all PHI API routes
+
+## D012: Generic Error Responses
+
+**Decision**: All API catch blocks return `{ error: "Internal server error" }` instead of exposing raw error messages.
+
+**Context**: The original code returned messages that could leak Prisma error details or stack traces if the error object was serialized differently. HIPAA requires safeguarding system internals. OWASP Top 10 lists information disclosure as a risk.
+
+**Alternatives**:
+- Structured error codes (e.g., `ERR_TXN_NOT_FOUND`): Better UX but more work
+- Error boundary middleware: Cleaner but Next.js App Router doesn't have route-level middleware for this
+
+**Trade-off**: Generic errors make debugging harder for API consumers. Detailed errors are still logged server-side via `console.error("[Internal]", error)`.
+
+**Files changed**: All API route files
+
+## D013: Input Length Limits on Free-Text Fields
+
+**Decision**: Cap `flagReason` at 500 characters and `reviewNote` at 2000 characters in the Zod schema.
+
+**Context**: Unbounded string inputs can be used for denial-of-service (large payloads filling the database) or injection attacks. HIPAA requires data integrity controls.
+
+**Alternatives**:
+- Database-level constraints: Would catch issues at the DB layer but return cryptic Prisma errors
+- No limits: Acceptable for a demo but bad practice for PHI data
+
+**Files changed**: `src/app/api/transactions/[id]/route.ts`
