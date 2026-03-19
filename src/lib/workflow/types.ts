@@ -13,6 +13,7 @@ export interface StepDefinition<TContext = Record<string, unknown>> {
   key: string;
   name: string;
   execute: (context: TContext) => Promise<StepResult>;
+  retryable?: boolean;
 }
 
 export interface WorkflowDefinition<TContext = Record<string, unknown>> {
