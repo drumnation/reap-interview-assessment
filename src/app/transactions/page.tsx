@@ -213,31 +213,36 @@ export default function TransactionsPage() {
   };
 
   const handleCategoryChange = async (transactionId: string, category: string) => {
+    setTransactions((prev) =>
+      prev.map((t) => (t.id === transactionId ? { ...t, category } : t))
+    );
+
     try {
       await fetch(`/api/transactions/${transactionId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ category }),
       });
-
-      // Refetch all transactions
-      await fetchTransactions();
     } catch (error) {
       console.error("Failed to update category:", error);
+      await fetchTransactions();
     }
   };
 
   const handleToggleReviewed = async (transactionId: string, isReviewed: boolean) => {
+    setTransactions((prev) =>
+      prev.map((t) => (t.id === transactionId ? { ...t, isReviewed } : t))
+    );
+
     try {
       await fetch(`/api/transactions/${transactionId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isReviewed }),
       });
-
-      await fetchTransactions();
     } catch (error) {
       console.error("Failed to toggle reviewed:", error);
+      await fetchTransactions();
     }
   };
 
