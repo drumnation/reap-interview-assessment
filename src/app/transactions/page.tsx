@@ -341,7 +341,7 @@ export default function TransactionsPage() {
             </SelectContent>
           </Select>
 
-          <Button variant="outline" size="icon" onClick={fetchTransactions}>
+          <Button variant="outline" size="icon" onClick={() => fetchTransactions()}>
             <RefreshCw className="h-4 w-4" />
           </Button>
         </div>

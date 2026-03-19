@@ -62,9 +62,29 @@ model Case {
   residentName String @map("resident_name")
   facilityName String @map("facility_name")
   status       String @default("DRAFT")
+  ownerId      String @default("system") @map("owner_id")
 
   // Relations
   transactions FinancialTransaction[]
 
+  @@index([ownerId])
   @@map("case")
+}
+
+// ============================================================================
+// AUDIT LOG
+// ============================================================================
+
+model AuditLog {
+  id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  userId       String
+  action       String
+  resourceType String
+  resourceId   String
+  ipAddress    String?
+
+  @@index([userId])
+  @@index([resourceType, resourceId])
+  @@map("audit_log")
 }

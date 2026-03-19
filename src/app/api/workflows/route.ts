@@ -35,8 +35,9 @@ export async function POST(request: Request) {
       status: result.status === 'COMPLETED' ? 200 : 500,
     });
   } catch (error) {
+    console.error('[Internal] Workflow execution failed:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }

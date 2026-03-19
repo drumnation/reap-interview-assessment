@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const caseId = searchParams.get("caseId");
@@ -14,7 +21,10 @@ export async function GET(request: NextRequest) {
     }
 
     const transactions = await prisma.financialTransaction.findMany({
-      where: { caseId },
+      where: {
+        caseId,
+        case: { ownerId: session.user?.email ?? "system" },
+      },
       select: {
         amountInCents: true,
         category: true,
@@ -31,7 +41,7 @@ export async function GET(request: NextRequest) {
     const income = transactions
       .filter((t) => t.amountInCents > 0)
       .reduce((sum, t) => sum + t.amountInCents, 0);
-    
+
     const expenses = transactions
       .filter((t) => t.amountInCents < 0)
       .reduce((sum, t) => sum + Math.abs(t.amountInCents), 0);
@@ -55,9 +65,9 @@ export async function GET(request: NextRequest) {
       byCategory,
     });
   } catch (error) {
-    console.error("Failed to fetch transaction stats:", error);
+    console.error("[Internal] Failed to fetch transaction stats:", error);
     return NextResponse.json(
-      { error: "Failed to fetch transaction stats" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

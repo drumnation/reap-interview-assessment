@@ -6,9 +6,28 @@ vi.mock('@/lib/prisma', () => ({
   prisma: {
     financialTransaction: {
       findMany: vi.fn(),
+      findFirst: vi.fn(),
       updateMany: vi.fn(),
     },
+    auditLog: {
+      create: vi.fn(),
+    },
   },
+}));
+
+// Mock next-auth to return a valid session
+vi.mock('next-auth', () => ({
+  getServerSession: vi.fn().mockResolvedValue({
+    user: { email: 'admin@example.com', name: 'admin' },
+  }),
+}));
+
+vi.mock('@/lib/auth', () => ({
+  authOptions: {},
+}));
+
+vi.mock('@/lib/audit', () => ({
+  logAccess: vi.fn(),
 }));
 
 import { prisma } from '@/lib/prisma';
@@ -65,10 +84,12 @@ describe('PATCH /api/transactions/bulk', () => {
     const json = await res.json();
 
     expect(mockUpdateMany).toHaveBeenCalledTimes(1);
-    expect(mockUpdateMany).toHaveBeenCalledWith({
-      where: { id: { in: ids } },
-      data: updates,
-    });
+    expect(mockUpdateMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ id: { in: ids } }),
+        data: updates,
+      })
+    );
     expect(json.count).toBe(3);
     expect(res.status).toBe(200);
   });
@@ -96,10 +117,12 @@ describe('PATCH /api/transactions/bulk', () => {
     const json = await res.json();
 
     expect(res.status).toBe(200);
-    expect(mockUpdateMany).toHaveBeenCalledWith({
-      where: { id: { in: ['id-1'] } },
-      data: {},
-    });
+    expect(mockUpdateMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ id: { in: ['id-1'] } }),
+        data: {},
+      })
+    );
   });
 });
 
@@ -138,7 +161,7 @@ describe('GET /api/transactions', () => {
 
     expect(mockFindMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { caseId: 'case-1' },
+        where: expect.objectContaining({ caseId: 'case-1' }),
         skip: 1,
         cursor: { id: 'cursor-abc' },
       })
