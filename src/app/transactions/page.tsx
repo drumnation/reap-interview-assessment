@@ -84,7 +84,10 @@ export default function TransactionsPage() {
   const [cases, setCases] = useState<Case[]>([]);
   const [selectedCaseId, setSelectedCaseId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(false);
 
   // Filter state
   const [searchTerm, setSearchTerm] = useState("");
@@ -116,16 +119,35 @@ export default function TransactionsPage() {
     }
   };
 
-  const fetchTransactions = async () => {
-    setIsLoading(true);
+  const fetchTransactions = async (cursor?: string) => {
+    const isAppending = !!cursor;
+    if (isAppending) {
+      setIsLoadingMore(true);
+    } else {
+      setIsLoading(true);
+    }
+
     try {
-      const response = await fetch(`/api/transactions?caseId=${selectedCaseId}`);
-      const data = await response.json();
-      setTransactions(data);
+      const url = new URL("/api/transactions", window.location.origin);
+      url.searchParams.set("caseId", selectedCaseId);
+      url.searchParams.set("limit", "100");
+      if (cursor) url.searchParams.set("cursor", cursor);
+
+      const response = await fetch(url.toString());
+      const json = await response.json();
+
+      if (isAppending) {
+        setTransactions((prev) => [...prev, ...json.data]);
+      } else {
+        setTransactions(json.data);
+      }
+      setNextCursor(json.nextCursor);
+      setHasMore(json.hasMore);
     } catch (error) {
       console.error("Failed to fetch transactions:", error);
     } finally {
       setIsLoading(false);
+      setIsLoadingMore(false);
     }
   };
 
@@ -628,6 +650,25 @@ export default function TransactionsPage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          )}
+
+          {hasMore && (
+            <div className="flex justify-center pt-4">
+              <Button
+                variant="outline"
+                onClick={() => fetchTransactions(nextCursor!)}
+                disabled={isLoadingMore}
+              >
+                {isLoadingMore ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                    Loading...
+                  </>
+                ) : (
+                  "Load More"
+                )}
+              </Button>
             </div>
           )}
         </CardContent>
