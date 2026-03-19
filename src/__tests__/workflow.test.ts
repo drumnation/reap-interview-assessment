@@ -248,8 +248,7 @@ describe('WorkflowExecutor + orderWorkflow', () => {
 
     // Inventory: 1 call, needs >= 0.4 to pass
     spy.mockReturnValueOnce(0.99);
-    // Shipment ID generation: 1 call (createShipmentStep line 113)
-    spy.mockReturnValueOnce(0.5);
+    // Shipment ID now uses crypto.randomUUID(), no Math.random call
     // Notification attempt 1: fail (< 0.25), then error index
     spy.mockReturnValueOnce(0.01).mockReturnValueOnce(0.01);
     // Notification attempt 2: fail (< 0.25), then error index
@@ -269,7 +268,7 @@ describe('WorkflowExecutor + orderWorkflow', () => {
     );
     expect(notifStep).toBeDefined();
     expect(notifStep!.status).toBe('FAILED');
-    // 1 (inventory) + 1 (shipment ID) + 4 attempts × 2 calls (notification) = 10
+    // 1 (inventory) + 4 attempts × 2 calls (notification) = 9
     expect(spy.mock.calls.length).toBeGreaterThanOrEqual(4); // 1 original + 3 retries (maxRetries=3)
   }, 20000);
 });

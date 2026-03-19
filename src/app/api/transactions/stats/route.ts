@@ -20,48 +20,41 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const transactions = await prisma.financialTransaction.findMany({
-      where: {
-        caseId,
-        case: { ownerId: session.user?.email ?? "system" },
-      },
-      select: {
-        amountInCents: true,
-        category: true,
-        isReviewed: true,
-        isFlagged: true,
-      },
-    });
+    const where = { caseId, case: { ownerId: session.user?.email ?? "system" } };
 
-    const total = transactions.length;
-    const reviewed = transactions.filter((t) => t.isReviewed).length;
-    const flagged = transactions.filter((t) => t.isFlagged).length;
-    const uncategorized = transactions.filter((t) => t.category === "UNCATEGORIZED").length;
+    const [total, reviewed, flagged, uncategorized, incomeAgg, expenseAgg, categoryGroups] =
+      await Promise.all([
+        prisma.financialTransaction.count({ where }),
+        prisma.financialTransaction.count({ where: { ...where, isReviewed: true } }),
+        prisma.financialTransaction.count({ where: { ...where, isFlagged: true } }),
+        prisma.financialTransaction.count({ where: { ...where, category: "UNCATEGORIZED" } }),
+        prisma.financialTransaction.aggregate({
+          where: { ...where, amountInCents: { gt: 0 } },
+          _sum: { amountInCents: true },
+        }),
+        prisma.financialTransaction.aggregate({
+          where: { ...where, amountInCents: { lt: 0 } },
+          _sum: { amountInCents: true },
+        }),
+        prisma.financialTransaction.groupBy({
+          by: ["category"],
+          where,
+          _count: true,
+          _sum: { amountInCents: true },
+        }),
+      ]);
 
-    const income = transactions
-      .filter((t) => t.amountInCents > 0)
-      .reduce((sum, t) => sum + t.amountInCents, 0);
-
-    const expenses = transactions
-      .filter((t) => t.amountInCents < 0)
-      .reduce((sum, t) => sum + Math.abs(t.amountInCents), 0);
-
-    const byCategory = transactions.reduce((acc, t) => {
-      if (!acc[t.category]) {
-        acc[t.category] = { count: 0, total: 0 };
-      }
-      acc[t.category].count++;
-      acc[t.category].total += t.amountInCents;
-      return acc;
-    }, {} as Record<string, { count: number; total: number }>);
+    const byCategory = Object.fromEntries(
+      categoryGroups.map((g) => [g.category, { count: g._count, total: g._sum.amountInCents ?? 0 }])
+    );
 
     return NextResponse.json({
       total,
       reviewed,
       flagged,
       uncategorized,
-      income,
-      expenses,
+      income: incomeAgg._sum.amountInCents ?? 0,
+      expenses: Math.abs(expenseAgg._sum.amountInCents ?? 0),
       byCategory,
     });
   } catch (error) {

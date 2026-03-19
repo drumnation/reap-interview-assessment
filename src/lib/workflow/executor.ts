@@ -1,23 +1,22 @@
-import type { StepDefinition, WorkflowDefinition, WorkflowRun, StepLog, StepStatus, WorkflowStatus } from './types';
+import type { StepDefinition, WorkflowDefinition, WorkflowRun, StepLog } from './types';
 
 async function withRetry<T>(
   fn: () => Promise<T>,
   maxRetries: number = 3,
   baseDelayMs: number = 50
 ): Promise<T> {
-  let lastError: Error;
-  const maxAttempts = 1 + maxRetries;
-  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+  let lastError: Error = new Error('Unreachable');
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
       return await fn();
     } catch (err) {
       lastError = err instanceof Error ? err : new Error(String(err));
-      if (attempt < maxAttempts - 1) {
+      if (attempt < maxRetries) {
         await new Promise((r) => setTimeout(r, baseDelayMs * Math.pow(2, attempt)));
       }
     }
   }
-  throw lastError!;
+  throw lastError;
 }
 
 /**
@@ -101,9 +100,5 @@ export class WorkflowExecutor<TContext extends Record<string, unknown>> {
       stepLog.completedAt = new Date();
       throw error;
     }
-  }
-
-  getWorkflowRun(): WorkflowRun {
-    return this.workflowRun;
   }
 }
