@@ -28,6 +28,7 @@ export const orderWorkflow: WorkflowDefinition<OrderContext> = {
       key: ORDER_STEP_KEYS.CHECK_INVENTORY,
       name: 'Check Inventory',
       execute: checkInventoryStep,
+      retryable: true,
     },
     {
       key: ORDER_STEP_KEYS.PROCESS_PAYMENT,
@@ -43,6 +44,7 @@ export const orderWorkflow: WorkflowDefinition<OrderContext> = {
       key: ORDER_STEP_KEYS.SEND_NOTIFICATION,
       name: 'Send Notification',
       execute: sendNotificationStep,
+      retryable: true,
     },
   ],
 };

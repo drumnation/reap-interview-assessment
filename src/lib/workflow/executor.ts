@@ -1,8 +1,27 @@
-import type { WorkflowDefinition, WorkflowRun, StepLog, StepStatus, WorkflowStatus } from './types';
+import type { StepDefinition, WorkflowDefinition, WorkflowRun, StepLog, StepStatus, WorkflowStatus } from './types';
+
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  baseDelayMs: number = 100
+): Promise<T> {
+  let lastError: Error;
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+      if (attempt < maxRetries - 1) {
+        await new Promise((r) => setTimeout(r, baseDelayMs * Math.pow(2, attempt)));
+      }
+    }
+  }
+  throw lastError!;
+}
 
 /**
  * Simple workflow executor
- * 
+ *
  * Executes workflow steps in sequence and tracks their status.
  * Each step receives the workflow context and can return updates to it.
  */
@@ -39,7 +58,7 @@ export class WorkflowExecutor<TContext extends Record<string, unknown>> {
     return this.workflowRun;
   }
 
-  private async executeStep(stepDef: { key: string; name: string; execute: (context: TContext) => Promise<{ success: boolean; data?: Record<string, unknown>; error?: string }> }): Promise<void> {
+  private async executeStep(stepDef: StepDefinition<TContext>): Promise<void> {
     const stepLog: StepLog = {
       stepKey: stepDef.key,
       stepName: stepDef.name,
@@ -49,16 +68,20 @@ export class WorkflowExecutor<TContext extends Record<string, unknown>> {
 
     this.workflowRun.steps.push(stepLog);
 
-    try {
+    const attemptStep = async () => {
       const result = await stepDef.execute(this.workflowRun.context as TContext);
 
       if (!result.success) {
-        stepLog.status = 'FAILED';
-        stepLog.error = result.error || 'Step execution failed';
-        stepLog.result = result;
-        stepLog.completedAt = new Date();
-        throw new Error(stepLog.error);
+        throw new Error(result.error || 'Step execution failed');
       }
+
+      return result;
+    };
+
+    try {
+      const result = stepDef.retryable
+        ? await withRetry(attemptStep)
+        : await attemptStep();
 
       // Merge any returned data into context
       if (result.data) {
@@ -72,11 +95,9 @@ export class WorkflowExecutor<TContext extends Record<string, unknown>> {
       stepLog.result = result;
       stepLog.completedAt = new Date();
     } catch (error) {
-      if (stepLog.status !== 'FAILED') {
-        stepLog.status = 'FAILED';
-        stepLog.error = error instanceof Error ? error.message : 'Unknown error';
-        stepLog.completedAt = new Date();
-      }
+      stepLog.status = 'FAILED';
+      stepLog.error = error instanceof Error ? error.message : 'Unknown error';
+      stepLog.completedAt = new Date();
       throw error;
     }
   }
