@@ -17,25 +17,14 @@ export async function PATCH(request: NextRequest) {
     const body = await request.json();
     const { ids, updates } = bulkUpdateSchema.parse(body);
 
-    const results = [];
-    for (const id of ids) {
-      try {
-        const updated = await prisma.financialTransaction.update({
-          where: { id },
-          data: updates,
-        });
-        results.push({ id, success: true, data: updated });
-      } catch (error) {
-        results.push({ id, success: false, error: "Failed to update" });
-      }
-    }
-
-    const successCount = results.filter((r) => r.success).length;
-    const failedCount = results.filter((r) => !r.success).length;
+    const result = await prisma.financialTransaction.updateMany({
+      where: { id: { in: ids } },
+      data: updates,
+    });
 
     return NextResponse.json({
-      message: `Updated ${successCount} transactions, ${failedCount} failed`,
-      results,
+      message: `Updated ${result.count} transactions`,
+      count: result.count,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
