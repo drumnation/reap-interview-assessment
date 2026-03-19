@@ -49,26 +49,30 @@ describe('Challenge 1: Transaction Review', () => {
   });
 
   describe('Optimistic UI updates', () => {
-    it('should not refetch all transactions after single-item updates', () => {
-      // The buggy code calls fetchTransactions() after every toggle/category change.
-      // Count occurrences of fetchTransactions() calls — there should be fewer after fix.
-      // Specifically, handleCategoryChange and handleToggleReviewed should NOT call fetchTransactions.
+    it('should use setTransactions for optimistic updates in single-item handlers', () => {
+      // The buggy code calls fetchTransactions() in the happy path after every action.
+      // The fix should use setTransactions() for optimistic updates (fetchTransactions
+      // in catch blocks is fine as an error fallback).
 
-      // Extract the handler functions
-      const categoryHandlerMatch = TRANSACTIONS_PAGE.match(
-        /const handleCategoryChange[\s\S]*?(?=\n\s*const handle|\n\s*const getCategoryBadge)/
+      // Extract the try blocks of each handler (before the catch)
+      const categoryTryMatch = TRANSACTIONS_PAGE.match(
+        /const handleCategoryChange[\s\S]*?try\s*\{([\s\S]*?)\}\s*catch/
       );
-      const toggleHandlerMatch = TRANSACTIONS_PAGE.match(
-        /const handleToggleReviewed[\s\S]*?(?=\n\s*const handle|\n\s*const getCategoryBadge)/
+      const toggleTryMatch = TRANSACTIONS_PAGE.match(
+        /const handleToggleReviewed[\s\S]*?try\s*\{([\s\S]*?)\}\s*catch/
       );
 
-      // These handlers should use optimistic state updates, not fetchTransactions
-      if (categoryHandlerMatch) {
-        expect(categoryHandlerMatch[0]).not.toMatch(/await\s+fetchTransactions\(\)/);
+      // The try block should NOT call fetchTransactions (optimistic instead)
+      if (categoryTryMatch) {
+        expect(categoryTryMatch[1]).not.toContain('fetchTransactions');
       }
-      if (toggleHandlerMatch) {
-        expect(toggleHandlerMatch[0]).not.toMatch(/await\s+fetchTransactions\(\)/);
+      if (toggleTryMatch) {
+        expect(toggleTryMatch[1]).not.toContain('fetchTransactions');
       }
+
+      // Both handlers should use setTransactions for optimistic updates
+      expect(TRANSACTIONS_PAGE).toMatch(/handleCategoryChange[\s\S]*?setTransactions/);
+      expect(TRANSACTIONS_PAGE).toMatch(/handleToggleReviewed[\s\S]*?setTransactions/);
     });
   });
 

@@ -3,15 +3,16 @@ import type { StepDefinition, WorkflowDefinition, WorkflowRun, StepLog, StepStat
 async function withRetry<T>(
   fn: () => Promise<T>,
   maxRetries: number = 3,
-  baseDelayMs: number = 100
+  baseDelayMs: number = 50
 ): Promise<T> {
   let lastError: Error;
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
+  const maxAttempts = 1 + maxRetries;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {
       return await fn();
     } catch (err) {
       lastError = err instanceof Error ? err : new Error(String(err));
-      if (attempt < maxRetries - 1) {
+      if (attempt < maxAttempts - 1) {
         await new Promise((r) => setTimeout(r, baseDelayMs * Math.pow(2, attempt)));
       }
     }
