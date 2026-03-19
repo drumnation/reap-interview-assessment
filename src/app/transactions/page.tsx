@@ -354,7 +354,7 @@ export default function TransactionsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500">Total</p>
-                <p className="text-2xl font-bold">{stats.total}</p>
+                <p className="text-2xl font-bold" data-testid="stat-total">{stats.total}</p>
               </div>
               <div className="text-gray-400">
                 <Filter className="h-8 w-8" />
@@ -368,7 +368,7 @@ export default function TransactionsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500">Reviewed</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-2xl font-bold text-green-600" data-testid="stat-reviewed">
                   {stats.reviewed}
                 </p>
               </div>
@@ -517,7 +517,7 @@ export default function TransactionsPage() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full" data-testid="transactions-table">
                 <thead>
                   <tr className="border-b">
                     <th className="pb-3 text-left">
@@ -553,6 +553,8 @@ export default function TransactionsPage() {
                   {filteredTransactions.map((transaction) => (
                     <tr
                       key={transaction.id}
+                      data-testid="transaction-row"
+                      data-reviewed={transaction.isReviewed}
                       className={cn(
                         "border-b last:border-0 hover:bg-gray-50",
                         transaction.isFlagged && "bg-red-50 hover:bg-red-100"
