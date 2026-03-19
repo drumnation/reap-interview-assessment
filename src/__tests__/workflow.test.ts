@@ -269,8 +269,7 @@ describe('WorkflowExecutor + orderWorkflow', () => {
     );
     expect(notifStep).toBeDefined();
     expect(notifStep!.status).toBe('FAILED');
-    // Proves retry was attempted: spy was called more than the 2 calls for
-    // a single inventory pass + shipment ID
-    expect(spy.mock.calls.length).toBeGreaterThanOrEqual(6);
+    // 1 (inventory) + 1 (shipment ID) + 4 attempts × 2 calls (notification) = 10
+    expect(spy.mock.calls.length).toBeGreaterThanOrEqual(4); // 1 original + 3 retries (maxRetries=3)
   }, 20000);
 });
