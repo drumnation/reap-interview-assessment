@@ -8,7 +8,15 @@ import { test, expect, type Page } from '@playwright/test';
 import { createEvidence, prove, proveComparison, attachEvidence } from './evidence';
 
 async function goToStory(page: Page, storyId: string) {
-  await page.goto(`/iframe.html?id=${storyId}&viewMode=story`, { waitUntil: 'networkidle' });
+  await page.goto(`/iframe.html?id=${storyId}&viewMode=story`);
+  // Wait for Storybook to hydrate — the root div gets populated by React
+  await page.waitForFunction(
+    () => {
+      const root = document.querySelector('#storybook-root');
+      return root && root.children.length > 0;
+    },
+    { timeout: 10000 }
+  );
 }
 
 // --- Badge Stories ---

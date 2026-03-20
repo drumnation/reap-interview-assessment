@@ -18,11 +18,23 @@ const meta = {
   component: TransactionRow,
   decorators: [
     (Story) => (
-      <table className="w-full">
-        <tbody>
-          <Story />
-        </tbody>
-      </table>
+      <div className="border rounded-lg overflow-hidden">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b bg-gray-50">
+              <th className="py-2 px-3 text-left text-xs font-medium text-gray-500">Date</th>
+              <th className="py-2 px-3 text-left text-xs font-medium text-gray-500">Description</th>
+              <th className="py-2 px-3 text-right text-xs font-medium text-gray-500">Amount</th>
+              <th className="py-2 px-3 text-left text-xs font-medium text-gray-500">Category</th>
+              <th className="py-2 px-3 text-center text-xs font-medium text-gray-500">Status</th>
+              <th className="py-2 px-3 text-center text-xs font-medium text-gray-500">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <Story />
+          </tbody>
+        </table>
+      </div>
     ),
   ],
   args: {

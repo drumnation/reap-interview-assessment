@@ -4,6 +4,14 @@ import { WorkflowStep } from '@/components/ui/workflow-step';
 const meta = {
   title: 'Components/WorkflowStep',
   component: WorkflowStep,
+  decorators: [
+    (Story) => (
+      <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+        <div className="text-sm font-medium text-gray-700 mb-2">Steps:</div>
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof WorkflowStep>;
 
 export default meta;
