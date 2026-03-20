@@ -3,15 +3,13 @@ node_modules/
 .pnp
 .pnp.js
 
-# Testing
+# Testing (raw results — artifacts/ is committed)
 coverage/
 test-results/
 e2e-results/
-e2e-report/
-e2e-artifacts/
 e2e-results-storybook/
+e2e-report/
 e2e-report-storybook/
-storybook-artifacts/
 blob-report/
 
 # Next.js

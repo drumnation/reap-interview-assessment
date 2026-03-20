@@ -8,7 +8,7 @@ import fs from 'fs';
 import path from 'path';
 
 const RESULTS_JSON = path.resolve('e2e-results-storybook/results.json');
-const OUTPUT_DIR = path.resolve('storybook-artifacts');
+const OUTPUT_DIR = path.resolve('artifacts/storybook');
 const DOCS_FILE = path.resolve('docs/STORYBOOK-RESULTS.md');
 
 function slugify(title: string): string {
@@ -137,9 +137,9 @@ function main() {
     '|-------|--------|----------|-----------|',
     ...rows.map(r => {
       const artifacts = [
-        r.screenshot ? `[screenshot](../storybook-artifacts/${r.screenshot})` : '',
-        r.video ? `[video](../storybook-artifacts/${r.video})` : '',
-        r.trace ? `[trace](../storybook-artifacts/${r.trace})` : '',
+        r.screenshot ? `[screenshot](../artifacts/storybook/${r.screenshot})` : '',
+        r.video ? `[video](../artifacts/storybook/${r.video})` : '',
+        r.trace ? `[trace](../artifacts/storybook/${r.trace})` : '',
       ].filter(Boolean).join(' · ');
       return `| ${icon(r.status)} ${r.title} | ${r.status} | ${r.duration}ms | ${artifacts} |`;
     }),
@@ -149,7 +149,7 @@ function main() {
     ...rows.flatMap(r => [
       `### ${icon(r.status)} ${r.title}`,
       '',
-      ...(r.screenshot ? [`![${r.title}](../storybook-artifacts/${r.screenshot})`, ''] : []),
+      ...(r.screenshot ? [`![${r.title}](../artifacts/storybook/${r.screenshot})`, ''] : []),
       ...(r.evidence ? [
         '<details><summary>Proof Chain + API Log</summary>',
         '',
@@ -159,15 +159,15 @@ function main() {
         '</details>',
         '',
       ] : []),
-      ...(r.video ? [`Video: [${r.video}](../storybook-artifacts/${r.video})`, ''] : []),
-      ...(r.trace ? [`Trace: \`pnpm exec playwright show-trace storybook-artifacts/${r.trace}\``, ''] : []),
+      ...(r.video ? [`Video: [${r.video}](../artifacts/storybook/${r.video})`, ''] : []),
+      ...(r.trace ? [`Trace: \`pnpm exec playwright show-trace artifacts/storybook/${r.trace}\``, ''] : []),
     ]),
   ];
 
   fs.mkdirSync(path.dirname(DOCS_FILE), { recursive: true });
   fs.writeFileSync(DOCS_FILE, lines.join('\n'));
 
-  console.log(`✅ ${rows.length} artifacts organized into storybook-artifacts/`);
+  console.log(`✅ ${rows.length} artifacts organized into artifacts/storybook/`);
   console.log(`📄 ${DOCS_FILE}`);
   for (const r of rows) {
     const files = [r.screenshot, r.video, r.trace].filter(Boolean);

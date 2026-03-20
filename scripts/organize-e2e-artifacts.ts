@@ -8,7 +8,7 @@ import fs from 'fs';
 import path from 'path';
 
 const RESULTS_JSON = path.resolve('e2e-results/results.json');
-const OUTPUT_DIR = path.resolve('e2e-artifacts');
+const OUTPUT_DIR = path.resolve('artifacts/e2e');
 const DOCS_FILE = path.resolve('docs/E2E-RESULTS.md');
 
 function slugify(title: string): string {
@@ -137,9 +137,9 @@ function main() {
     '|-------|--------|----------|-----------|',
     ...rows.map(r => {
       const artifacts = [
-        r.screenshot ? `[screenshot](../e2e-artifacts/${r.screenshot})` : '',
-        r.video ? `[video](../e2e-artifacts/${r.video})` : '',
-        r.trace ? `[trace](../e2e-artifacts/${r.trace})` : '',
+        r.screenshot ? `[screenshot](../artifacts/e2e/${r.screenshot})` : '',
+        r.video ? `[video](../artifacts/e2e/${r.video})` : '',
+        r.trace ? `[trace](../artifacts/e2e/${r.trace})` : '',
       ].filter(Boolean).join(' · ');
       return `| ${icon(r.status)} ${r.title} | ${r.status} | ${r.duration}ms | ${artifacts} |`;
     }),
@@ -149,7 +149,7 @@ function main() {
     ...rows.flatMap(r => [
       `### ${icon(r.status)} ${r.title}`,
       '',
-      ...(r.screenshot ? [`![${r.title}](../e2e-artifacts/${r.screenshot})`, ''] : []),
+      ...(r.screenshot ? [`![${r.title}](../artifacts/e2e/${r.screenshot})`, ''] : []),
       ...(r.evidence ? [
         '<details><summary>Proof Chain + API Log</summary>',
         '',
@@ -159,15 +159,15 @@ function main() {
         '</details>',
         '',
       ] : []),
-      ...(r.video ? [`Video: [${r.video}](../e2e-artifacts/${r.video})`, ''] : []),
-      ...(r.trace ? [`Trace: \`pnpm exec playwright show-trace e2e-artifacts/${r.trace}\``, ''] : []),
+      ...(r.video ? [`Video: [${r.video}](../artifacts/e2e/${r.video})`, ''] : []),
+      ...(r.trace ? [`Trace: \`pnpm exec playwright show-trace artifacts/e2e/${r.trace}\``, ''] : []),
     ]),
   ];
 
   fs.mkdirSync(path.dirname(DOCS_FILE), { recursive: true });
   fs.writeFileSync(DOCS_FILE, lines.join('\n'));
 
-  console.log(`✅ ${rows.length} artifacts organized into e2e-artifacts/`);
+  console.log(`✅ ${rows.length} artifacts organized into artifacts/e2e/`);
   console.log(`📄 ${DOCS_FILE}`);
   for (const r of rows) {
     const files = [r.screenshot, r.video, r.trace].filter(Boolean);

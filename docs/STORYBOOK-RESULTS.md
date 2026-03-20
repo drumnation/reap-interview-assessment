@@ -1,24 +1,24 @@
 # Storybook Component Test Results
 
-> Generated: 2026-03-20T02:43:02.893Z
+> Generated: 2026-03-20T02:47:44.160Z
 
 **7/7 passed** 
 
 | Story | Status | Duration | Artifacts |
 |-------|--------|----------|-----------|
-| ✅ Badge: AllVariants renders all 6 badge labels | passed | 1162ms | [screenshot](../storybook-artifacts/badge-allvariants-renders-all-6-badge-labels.png) · [video](../storybook-artifacts/badge-allvariants-renders-all-6-badge-labels.webm) · [trace](../storybook-artifacts/badge-allvariants-renders-all-6-badge-labels-trace.zip) |
-| ✅ TransactionRow: Default shows Pending badge and Review button | passed | 996ms | [screenshot](../storybook-artifacts/transactionrow-default-shows-pending-badge-and-review-button.png) · [video](../storybook-artifacts/transactionrow-default-shows-pending-badge-and-review-button.webm) · [trace](../storybook-artifacts/transactionrow-default-shows-pending-badge-and-review-button-trace.zip) |
-| ✅ TransactionRow: Reviewed shows green Reviewed badge and Unreview button | passed | 949ms | [screenshot](../storybook-artifacts/transactionrow-reviewed-shows-green-reviewed-badge-and-unreview-button.png) · [video](../storybook-artifacts/transactionrow-reviewed-shows-green-reviewed-badge-and-unreview-button.webm) · [trace](../storybook-artifacts/transactionrow-reviewed-shows-green-reviewed-badge-and-unreview-button-trace.zip) |
-| ✅ TransactionRow: Flagged shows red background and flag reason | passed | 986ms | [screenshot](../storybook-artifacts/transactionrow-flagged-shows-red-background-and-flag-reason.png) · [video](../storybook-artifacts/transactionrow-flagged-shows-red-background-and-flag-reason.webm) · [trace](../storybook-artifacts/transactionrow-flagged-shows-red-background-and-flag-reason-trace.zip) |
-| ✅ TransactionRow: Review button click triggers callback | passed | 983ms | [screenshot](../storybook-artifacts/transactionrow-review-button-click-triggers-callback.png) · [video](../storybook-artifacts/transactionrow-review-button-click-triggers-callback.webm) · [trace](../storybook-artifacts/transactionrow-review-button-click-triggers-callback-trace.zip) |
-| ✅ WorkflowStep: all 5 statuses render correctly | passed | 3649ms | [screenshot](../storybook-artifacts/workflowstep-all-5-statuses-render-correctly.png) · [video](../storybook-artifacts/workflowstep-all-5-statuses-render-correctly.webm) · [trace](../storybook-artifacts/workflowstep-all-5-statuses-render-correctly-trace.zip) |
-| ✅ WorkflowSuccessRate: Comparison shows before/after impact | passed | 921ms | [screenshot](../storybook-artifacts/workflowsuccessrate-comparison-shows-beforeafter-impact.png) · [video](../storybook-artifacts/workflowsuccessrate-comparison-shows-beforeafter-impact.webm) · [trace](../storybook-artifacts/workflowsuccessrate-comparison-shows-beforeafter-impact-trace.zip) |
+| ✅ Badge: AllVariants renders all 6 badge labels | passed | 1162ms | [screenshot](../artifacts/storybook/badge-allvariants-renders-all-6-badge-labels.png) · [video](../artifacts/storybook/badge-allvariants-renders-all-6-badge-labels.webm) · [trace](../artifacts/storybook/badge-allvariants-renders-all-6-badge-labels-trace.zip) |
+| ✅ TransactionRow: Default shows Pending badge and Review button | passed | 996ms | [screenshot](../artifacts/storybook/transactionrow-default-shows-pending-badge-and-review-button.png) · [video](../artifacts/storybook/transactionrow-default-shows-pending-badge-and-review-button.webm) · [trace](../artifacts/storybook/transactionrow-default-shows-pending-badge-and-review-button-trace.zip) |
+| ✅ TransactionRow: Reviewed shows green Reviewed badge and Unreview button | passed | 949ms | [screenshot](../artifacts/storybook/transactionrow-reviewed-shows-green-reviewed-badge-and-unreview-button.png) · [video](../artifacts/storybook/transactionrow-reviewed-shows-green-reviewed-badge-and-unreview-button.webm) · [trace](../artifacts/storybook/transactionrow-reviewed-shows-green-reviewed-badge-and-unreview-button-trace.zip) |
+| ✅ TransactionRow: Flagged shows red background and flag reason | passed | 986ms | [screenshot](../artifacts/storybook/transactionrow-flagged-shows-red-background-and-flag-reason.png) · [video](../artifacts/storybook/transactionrow-flagged-shows-red-background-and-flag-reason.webm) · [trace](../artifacts/storybook/transactionrow-flagged-shows-red-background-and-flag-reason-trace.zip) |
+| ✅ TransactionRow: Review button click triggers callback | passed | 983ms | [screenshot](../artifacts/storybook/transactionrow-review-button-click-triggers-callback.png) · [video](../artifacts/storybook/transactionrow-review-button-click-triggers-callback.webm) · [trace](../artifacts/storybook/transactionrow-review-button-click-triggers-callback-trace.zip) |
+| ✅ WorkflowStep: all 5 statuses render correctly | passed | 3649ms | [screenshot](../artifacts/storybook/workflowstep-all-5-statuses-render-correctly.png) · [video](../artifacts/storybook/workflowstep-all-5-statuses-render-correctly.webm) · [trace](../artifacts/storybook/workflowstep-all-5-statuses-render-correctly-trace.zip) |
+| ✅ WorkflowSuccessRate: Comparison shows before/after impact | passed | 921ms | [screenshot](../artifacts/storybook/workflowsuccessrate-comparison-shows-beforeafter-impact.png) · [video](../artifacts/storybook/workflowsuccessrate-comparison-shows-beforeafter-impact.webm) · [trace](../artifacts/storybook/workflowsuccessrate-comparison-shows-beforeafter-impact-trace.zip) |
 
 ## Details
 
 ### ✅ Badge: AllVariants renders all 6 badge labels
 
-![Badge: AllVariants renders all 6 badge labels](../storybook-artifacts/badge-allvariants-renders-all-6-badge-labels.png)
+![Badge: AllVariants renders all 6 badge labels](../artifacts/storybook/badge-allvariants-renders-all-6-badge-labels.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -63,13 +63,13 @@ VERDICT: 7/7 assertions proved
 ```
 </details>
 
-Video: [badge-allvariants-renders-all-6-badge-labels.webm](../storybook-artifacts/badge-allvariants-renders-all-6-badge-labels.webm)
+Video: [badge-allvariants-renders-all-6-badge-labels.webm](../artifacts/storybook/badge-allvariants-renders-all-6-badge-labels.webm)
 
-Trace: `pnpm exec playwright show-trace storybook-artifacts/badge-allvariants-renders-all-6-badge-labels-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/storybook/badge-allvariants-renders-all-6-badge-labels-trace.zip`
 
 ### ✅ TransactionRow: Default shows Pending badge and Review button
 
-![TransactionRow: Default shows Pending badge and Review button](../storybook-artifacts/transactionrow-default-shows-pending-badge-and-review-button.png)
+![TransactionRow: Default shows Pending badge and Review button](../artifacts/storybook/transactionrow-default-shows-pending-badge-and-review-button.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -98,13 +98,13 @@ VERDICT: 3/3 assertions proved
 ```
 </details>
 
-Video: [transactionrow-default-shows-pending-badge-and-review-button.webm](../storybook-artifacts/transactionrow-default-shows-pending-badge-and-review-button.webm)
+Video: [transactionrow-default-shows-pending-badge-and-review-button.webm](../artifacts/storybook/transactionrow-default-shows-pending-badge-and-review-button.webm)
 
-Trace: `pnpm exec playwright show-trace storybook-artifacts/transactionrow-default-shows-pending-badge-and-review-button-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/storybook/transactionrow-default-shows-pending-badge-and-review-button-trace.zip`
 
 ### ✅ TransactionRow: Reviewed shows green Reviewed badge and Unreview button
 
-![TransactionRow: Reviewed shows green Reviewed badge and Unreview button](../storybook-artifacts/transactionrow-reviewed-shows-green-reviewed-badge-and-unreview-button.png)
+![TransactionRow: Reviewed shows green Reviewed badge and Unreview button](../artifacts/storybook/transactionrow-reviewed-shows-green-reviewed-badge-and-unreview-button.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -129,13 +129,13 @@ VERDICT: 2/2 assertions proved
 ```
 </details>
 
-Video: [transactionrow-reviewed-shows-green-reviewed-badge-and-unreview-button.webm](../storybook-artifacts/transactionrow-reviewed-shows-green-reviewed-badge-and-unreview-button.webm)
+Video: [transactionrow-reviewed-shows-green-reviewed-badge-and-unreview-button.webm](../artifacts/storybook/transactionrow-reviewed-shows-green-reviewed-badge-and-unreview-button.webm)
 
-Trace: `pnpm exec playwright show-trace storybook-artifacts/transactionrow-reviewed-shows-green-reviewed-badge-and-unreview-button-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/storybook/transactionrow-reviewed-shows-green-reviewed-badge-and-unreview-button-trace.zip`
 
 ### ✅ TransactionRow: Flagged shows red background and flag reason
 
-![TransactionRow: Flagged shows red background and flag reason](../storybook-artifacts/transactionrow-flagged-shows-red-background-and-flag-reason.png)
+![TransactionRow: Flagged shows red background and flag reason](../artifacts/storybook/transactionrow-flagged-shows-red-background-and-flag-reason.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -160,13 +160,13 @@ VERDICT: 2/2 assertions proved
 ```
 </details>
 
-Video: [transactionrow-flagged-shows-red-background-and-flag-reason.webm](../storybook-artifacts/transactionrow-flagged-shows-red-background-and-flag-reason.webm)
+Video: [transactionrow-flagged-shows-red-background-and-flag-reason.webm](../artifacts/storybook/transactionrow-flagged-shows-red-background-and-flag-reason.webm)
 
-Trace: `pnpm exec playwright show-trace storybook-artifacts/transactionrow-flagged-shows-red-background-and-flag-reason-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/storybook/transactionrow-flagged-shows-red-background-and-flag-reason-trace.zip`
 
 ### ✅ TransactionRow: Review button click triggers callback
 
-![TransactionRow: Review button click triggers callback](../storybook-artifacts/transactionrow-review-button-click-triggers-callback.png)
+![TransactionRow: Review button click triggers callback](../artifacts/storybook/transactionrow-review-button-click-triggers-callback.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -191,13 +191,13 @@ VERDICT: 2/2 assertions proved
 ```
 </details>
 
-Video: [transactionrow-review-button-click-triggers-callback.webm](../storybook-artifacts/transactionrow-review-button-click-triggers-callback.webm)
+Video: [transactionrow-review-button-click-triggers-callback.webm](../artifacts/storybook/transactionrow-review-button-click-triggers-callback.webm)
 
-Trace: `pnpm exec playwright show-trace storybook-artifacts/transactionrow-review-button-click-triggers-callback-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/storybook/transactionrow-review-button-click-triggers-callback-trace.zip`
 
 ### ✅ WorkflowStep: all 5 statuses render correctly
 
-![WorkflowStep: all 5 statuses render correctly](../storybook-artifacts/workflowstep-all-5-statuses-render-correctly.png)
+![WorkflowStep: all 5 statuses render correctly](../artifacts/storybook/workflowstep-all-5-statuses-render-correctly.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -246,13 +246,13 @@ VERDICT: 8/8 assertions proved
 ```
 </details>
 
-Video: [workflowstep-all-5-statuses-render-correctly.webm](../storybook-artifacts/workflowstep-all-5-statuses-render-correctly.webm)
+Video: [workflowstep-all-5-statuses-render-correctly.webm](../artifacts/storybook/workflowstep-all-5-statuses-render-correctly.webm)
 
-Trace: `pnpm exec playwright show-trace storybook-artifacts/workflowstep-all-5-statuses-render-correctly-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/storybook/workflowstep-all-5-statuses-render-correctly-trace.zip`
 
 ### ✅ WorkflowSuccessRate: Comparison shows before/after impact
 
-![WorkflowSuccessRate: Comparison shows before/after impact](../storybook-artifacts/workflowsuccessrate-comparison-shows-beforeafter-impact.png)
+![WorkflowSuccessRate: Comparison shows before/after impact](../artifacts/storybook/workflowsuccessrate-comparison-shows-beforeafter-impact.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -285,6 +285,6 @@ VERDICT: 4/4 assertions proved
 ```
 </details>
 
-Video: [workflowsuccessrate-comparison-shows-beforeafter-impact.webm](../storybook-artifacts/workflowsuccessrate-comparison-shows-beforeafter-impact.webm)
+Video: [workflowsuccessrate-comparison-shows-beforeafter-impact.webm](../artifacts/storybook/workflowsuccessrate-comparison-shows-beforeafter-impact.webm)
 
-Trace: `pnpm exec playwright show-trace storybook-artifacts/workflowsuccessrate-comparison-shows-beforeafter-impact-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/storybook/workflowsuccessrate-comparison-shows-beforeafter-impact-trace.zip`

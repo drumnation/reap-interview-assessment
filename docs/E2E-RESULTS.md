@@ -1,27 +1,27 @@
 # E2E Test Results
 
-> Generated: 2026-03-20T02:15:14.474Z
+> Generated: 2026-03-20T02:47:43.378Z
 
 **10/10 passed** 
 
 | Story | Status | Duration | Artifacts |
 |-------|--------|----------|-----------|
-| ✅ US-01: bulk review sends single request to /api/transactions/bulk | passed | 5873ms | [screenshot](../e2e-artifacts/us-01-bulk-review-sends-single-request-to-apitransactionsbulk.png) · [video](../e2e-artifacts/us-01-bulk-review-sends-single-request-to-apitransactionsbulk.webm) · [trace](../e2e-artifacts/us-01-bulk-review-sends-single-request-to-apitransactionsbulk-trace.zip) |
-| ✅ US-02: initial load shows <= 100 rows with Load More button | passed | 1946ms | [screenshot](../e2e-artifacts/us-02-initial-load-shows-100-rows-with-load-more-button.png) · [video](../e2e-artifacts/us-02-initial-load-shows-100-rows-with-load-more-button.webm) · [trace](../e2e-artifacts/us-02-initial-load-shows-100-rows-with-load-more-button-trace.zip) |
-| ✅ US-03: Load More appends rows without page reload | passed | 3235ms | [screenshot](../e2e-artifacts/us-03-load-more-appends-rows-without-page-reload.png) · [video](../e2e-artifacts/us-03-load-more-appends-rows-without-page-reload.webm) · [trace](../e2e-artifacts/us-03-load-more-appends-rows-without-page-reload-trace.zip) |
-| ✅ US-04: category change updates immediately without refetching all transactions | passed | 3447ms | [screenshot](../e2e-artifacts/us-04-category-change-updates-immediately-without-refetching-all-transactions.png) · [video](../e2e-artifacts/us-04-category-change-updates-immediately-without-refetching-all-transactions.webm) · [trace](../e2e-artifacts/us-04-category-change-updates-immediately-without-refetching-all-transactions-trace.zip) |
-| ✅ US-05: search filters table rows client-side | passed | 2063ms | [screenshot](../e2e-artifacts/us-05-search-filters-table-rows-client-side.png) · [video](../e2e-artifacts/us-05-search-filters-table-rows-client-side.webm) · [trace](../e2e-artifacts/us-05-search-filters-table-rows-client-side-trace.zip) |
-| ✅ US-06: stats card updates after marking a transaction reviewed | passed | 2237ms | [screenshot](../e2e-artifacts/us-06-stats-card-updates-after-marking-a-transaction-reviewed.png) · [video](../e2e-artifacts/us-06-stats-card-updates-after-marking-a-transaction-reviewed.webm) · [trace](../e2e-artifacts/us-06-stats-card-updates-after-marking-a-transaction-reviewed-trace.zip) |
-| ✅ US-07: single workflow run completes successfully | passed | 3846ms | [screenshot](../e2e-artifacts/us-07-single-workflow-run-completes-successfully.png) · [video](../e2e-artifacts/us-07-single-workflow-run-completes-successfully.webm) · [trace](../e2e-artifacts/us-07-single-workflow-run-completes-successfully-trace.zip) |
-| ✅ US-08: batch run of 5 succeeds at least 4/5 times | passed | 7913ms | [screenshot](../e2e-artifacts/us-08-batch-run-of-5-succeeds-at-least-45-times.png) · [video](../e2e-artifacts/us-08-batch-run-of-5-succeeds-at-least-45-times.webm) · [trace](../e2e-artifacts/us-08-batch-run-of-5-succeeds-at-least-45-times-trace.zip) |
-| ✅ US-09: expanding a completed run shows all 5 steps | passed | 2303ms | [screenshot](../e2e-artifacts/us-09-expanding-a-completed-run-shows-all-5-steps.png) · [video](../e2e-artifacts/us-09-expanding-a-completed-run-shows-all-5-steps.webm) · [trace](../e2e-artifacts/us-09-expanding-a-completed-run-shows-all-5-steps-trace.zip) |
-| ✅ US-10: clearing history empties the run list | passed | 1184ms | [screenshot](../e2e-artifacts/us-10-clearing-history-empties-the-run-list.png) · [video](../e2e-artifacts/us-10-clearing-history-empties-the-run-list.webm) · [trace](../e2e-artifacts/us-10-clearing-history-empties-the-run-list-trace.zip) |
+| ✅ US-01: bulk review sends single request to /api/transactions/bulk | passed | 5873ms | [screenshot](../artifacts/e2e/us-01-bulk-review-sends-single-request-to-apitransactionsbulk.png) · [video](../artifacts/e2e/us-01-bulk-review-sends-single-request-to-apitransactionsbulk.webm) · [trace](../artifacts/e2e/us-01-bulk-review-sends-single-request-to-apitransactionsbulk-trace.zip) |
+| ✅ US-02: initial load shows <= 100 rows with Load More button | passed | 1946ms | [screenshot](../artifacts/e2e/us-02-initial-load-shows-100-rows-with-load-more-button.png) · [video](../artifacts/e2e/us-02-initial-load-shows-100-rows-with-load-more-button.webm) · [trace](../artifacts/e2e/us-02-initial-load-shows-100-rows-with-load-more-button-trace.zip) |
+| ✅ US-03: Load More appends rows without page reload | passed | 3235ms | [screenshot](../artifacts/e2e/us-03-load-more-appends-rows-without-page-reload.png) · [video](../artifacts/e2e/us-03-load-more-appends-rows-without-page-reload.webm) · [trace](../artifacts/e2e/us-03-load-more-appends-rows-without-page-reload-trace.zip) |
+| ✅ US-04: category change updates immediately without refetching all transactions | passed | 3447ms | [screenshot](../artifacts/e2e/us-04-category-change-updates-immediately-without-refetching-all-transactions.png) · [video](../artifacts/e2e/us-04-category-change-updates-immediately-without-refetching-all-transactions.webm) · [trace](../artifacts/e2e/us-04-category-change-updates-immediately-without-refetching-all-transactions-trace.zip) |
+| ✅ US-05: search filters table rows client-side | passed | 2063ms | [screenshot](../artifacts/e2e/us-05-search-filters-table-rows-client-side.png) · [video](../artifacts/e2e/us-05-search-filters-table-rows-client-side.webm) · [trace](../artifacts/e2e/us-05-search-filters-table-rows-client-side-trace.zip) |
+| ✅ US-06: stats card updates after marking a transaction reviewed | passed | 2237ms | [screenshot](../artifacts/e2e/us-06-stats-card-updates-after-marking-a-transaction-reviewed.png) · [video](../artifacts/e2e/us-06-stats-card-updates-after-marking-a-transaction-reviewed.webm) · [trace](../artifacts/e2e/us-06-stats-card-updates-after-marking-a-transaction-reviewed-trace.zip) |
+| ✅ US-07: single workflow run completes successfully | passed | 3846ms | [screenshot](../artifacts/e2e/us-07-single-workflow-run-completes-successfully.png) · [video](../artifacts/e2e/us-07-single-workflow-run-completes-successfully.webm) · [trace](../artifacts/e2e/us-07-single-workflow-run-completes-successfully-trace.zip) |
+| ✅ US-08: batch run of 5 succeeds at least 4/5 times | passed | 7913ms | [screenshot](../artifacts/e2e/us-08-batch-run-of-5-succeeds-at-least-45-times.png) · [video](../artifacts/e2e/us-08-batch-run-of-5-succeeds-at-least-45-times.webm) · [trace](../artifacts/e2e/us-08-batch-run-of-5-succeeds-at-least-45-times-trace.zip) |
+| ✅ US-09: expanding a completed run shows all 5 steps | passed | 2303ms | [screenshot](../artifacts/e2e/us-09-expanding-a-completed-run-shows-all-5-steps.png) · [video](../artifacts/e2e/us-09-expanding-a-completed-run-shows-all-5-steps.webm) · [trace](../artifacts/e2e/us-09-expanding-a-completed-run-shows-all-5-steps-trace.zip) |
+| ✅ US-10: clearing history empties the run list | passed | 1184ms | [screenshot](../artifacts/e2e/us-10-clearing-history-empties-the-run-list.png) · [video](../artifacts/e2e/us-10-clearing-history-empties-the-run-list.webm) · [trace](../artifacts/e2e/us-10-clearing-history-empties-the-run-list-trace.zip) |
 
 ## Details
 
 ### ✅ US-01: bulk review sends single request to /api/transactions/bulk
 
-![US-01: bulk review sends single request to /api/transactions/bulk](../e2e-artifacts/us-01-bulk-review-sends-single-request-to-apitransactionsbulk.png)
+![US-01: bulk review sends single request to /api/transactions/bulk](../artifacts/e2e/us-01-bulk-review-sends-single-request-to-apitransactionsbulk.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -54,13 +54,13 @@ VERDICT: 3/3 assertions proved
 ```
 </details>
 
-Video: [us-01-bulk-review-sends-single-request-to-apitransactionsbulk.webm](../e2e-artifacts/us-01-bulk-review-sends-single-request-to-apitransactionsbulk.webm)
+Video: [us-01-bulk-review-sends-single-request-to-apitransactionsbulk.webm](../artifacts/e2e/us-01-bulk-review-sends-single-request-to-apitransactionsbulk.webm)
 
-Trace: `pnpm exec playwright show-trace e2e-artifacts/us-01-bulk-review-sends-single-request-to-apitransactionsbulk-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/e2e/us-01-bulk-review-sends-single-request-to-apitransactionsbulk-trace.zip`
 
 ### ✅ US-02: initial load shows <= 100 rows with Load More button
 
-![US-02: initial load shows <= 100 rows with Load More button](../e2e-artifacts/us-02-initial-load-shows-100-rows-with-load-more-button.png)
+![US-02: initial load shows <= 100 rows with Load More button](../artifacts/e2e/us-02-initial-load-shows-100-rows-with-load-more-button.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -92,13 +92,13 @@ VERDICT: 3/3 assertions proved
 ```
 </details>
 
-Video: [us-02-initial-load-shows-100-rows-with-load-more-button.webm](../e2e-artifacts/us-02-initial-load-shows-100-rows-with-load-more-button.webm)
+Video: [us-02-initial-load-shows-100-rows-with-load-more-button.webm](../artifacts/e2e/us-02-initial-load-shows-100-rows-with-load-more-button.webm)
 
-Trace: `pnpm exec playwright show-trace e2e-artifacts/us-02-initial-load-shows-100-rows-with-load-more-button-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/e2e/us-02-initial-load-shows-100-rows-with-load-more-button-trace.zip`
 
 ### ✅ US-03: Load More appends rows without page reload
 
-![US-03: Load More appends rows without page reload](../e2e-artifacts/us-03-load-more-appends-rows-without-page-reload.png)
+![US-03: Load More appends rows without page reload](../artifacts/e2e/us-03-load-more-appends-rows-without-page-reload.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -127,13 +127,13 @@ VERDICT: 2/2 assertions proved
 ```
 </details>
 
-Video: [us-03-load-more-appends-rows-without-page-reload.webm](../e2e-artifacts/us-03-load-more-appends-rows-without-page-reload.webm)
+Video: [us-03-load-more-appends-rows-without-page-reload.webm](../artifacts/e2e/us-03-load-more-appends-rows-without-page-reload.webm)
 
-Trace: `pnpm exec playwright show-trace e2e-artifacts/us-03-load-more-appends-rows-without-page-reload-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/e2e/us-03-load-more-appends-rows-without-page-reload-trace.zip`
 
 ### ✅ US-04: category change updates immediately without refetching all transactions
 
-![US-04: category change updates immediately without refetching all transactions](../e2e-artifacts/us-04-category-change-updates-immediately-without-refetching-all-transactions.png)
+![US-04: category change updates immediately without refetching all transactions](../artifacts/e2e/us-04-category-change-updates-immediately-without-refetching-all-transactions.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -166,13 +166,13 @@ VERDICT: 3/3 assertions proved
 ```
 </details>
 
-Video: [us-04-category-change-updates-immediately-without-refetching-all-transactions.webm](../e2e-artifacts/us-04-category-change-updates-immediately-without-refetching-all-transactions.webm)
+Video: [us-04-category-change-updates-immediately-without-refetching-all-transactions.webm](../artifacts/e2e/us-04-category-change-updates-immediately-without-refetching-all-transactions.webm)
 
-Trace: `pnpm exec playwright show-trace e2e-artifacts/us-04-category-change-updates-immediately-without-refetching-all-transactions-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/e2e/us-04-category-change-updates-immediately-without-refetching-all-transactions-trace.zip`
 
 ### ✅ US-05: search filters table rows client-side
 
-![US-05: search filters table rows client-side](../e2e-artifacts/us-05-search-filters-table-rows-client-side.png)
+![US-05: search filters table rows client-side](../artifacts/e2e/us-05-search-filters-table-rows-client-side.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -204,13 +204,13 @@ VERDICT: 3/3 assertions proved
 ```
 </details>
 
-Video: [us-05-search-filters-table-rows-client-side.webm](../e2e-artifacts/us-05-search-filters-table-rows-client-side.webm)
+Video: [us-05-search-filters-table-rows-client-side.webm](../artifacts/e2e/us-05-search-filters-table-rows-client-side.webm)
 
-Trace: `pnpm exec playwright show-trace e2e-artifacts/us-05-search-filters-table-rows-client-side-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/e2e/us-05-search-filters-table-rows-client-side-trace.zip`
 
 ### ✅ US-06: stats card updates after marking a transaction reviewed
 
-![US-06: stats card updates after marking a transaction reviewed](../e2e-artifacts/us-06-stats-card-updates-after-marking-a-transaction-reviewed.png)
+![US-06: stats card updates after marking a transaction reviewed](../artifacts/e2e/us-06-stats-card-updates-after-marking-a-transaction-reviewed.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -243,13 +243,13 @@ VERDICT: 3/3 assertions proved
 ```
 </details>
 
-Video: [us-06-stats-card-updates-after-marking-a-transaction-reviewed.webm](../e2e-artifacts/us-06-stats-card-updates-after-marking-a-transaction-reviewed.webm)
+Video: [us-06-stats-card-updates-after-marking-a-transaction-reviewed.webm](../artifacts/e2e/us-06-stats-card-updates-after-marking-a-transaction-reviewed.webm)
 
-Trace: `pnpm exec playwright show-trace e2e-artifacts/us-06-stats-card-updates-after-marking-a-transaction-reviewed-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/e2e/us-06-stats-card-updates-after-marking-a-transaction-reviewed-trace.zip`
 
 ### ✅ US-07: single workflow run completes successfully
 
-![US-07: single workflow run completes successfully](../e2e-artifacts/us-07-single-workflow-run-completes-successfully.png)
+![US-07: single workflow run completes successfully](../artifacts/e2e/us-07-single-workflow-run-completes-successfully.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -281,13 +281,13 @@ VERDICT: 3/3 assertions proved
 ```
 </details>
 
-Video: [us-07-single-workflow-run-completes-successfully.webm](../e2e-artifacts/us-07-single-workflow-run-completes-successfully.webm)
+Video: [us-07-single-workflow-run-completes-successfully.webm](../artifacts/e2e/us-07-single-workflow-run-completes-successfully.webm)
 
-Trace: `pnpm exec playwright show-trace e2e-artifacts/us-07-single-workflow-run-completes-successfully-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/e2e/us-07-single-workflow-run-completes-successfully-trace.zip`
 
 ### ✅ US-08: batch run of 5 succeeds at least 4/5 times
 
-![US-08: batch run of 5 succeeds at least 4/5 times](../e2e-artifacts/us-08-batch-run-of-5-succeeds-at-least-45-times.png)
+![US-08: batch run of 5 succeeds at least 4/5 times](../artifacts/e2e/us-08-batch-run-of-5-succeeds-at-least-45-times.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -332,13 +332,13 @@ VERDICT: 5/5 assertions proved
 ```
 </details>
 
-Video: [us-08-batch-run-of-5-succeeds-at-least-45-times.webm](../e2e-artifacts/us-08-batch-run-of-5-succeeds-at-least-45-times.webm)
+Video: [us-08-batch-run-of-5-succeeds-at-least-45-times.webm](../artifacts/e2e/us-08-batch-run-of-5-succeeds-at-least-45-times.webm)
 
-Trace: `pnpm exec playwright show-trace e2e-artifacts/us-08-batch-run-of-5-succeeds-at-least-45-times-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/e2e/us-08-batch-run-of-5-succeeds-at-least-45-times-trace.zip`
 
 ### ✅ US-09: expanding a completed run shows all 5 steps
 
-![US-09: expanding a completed run shows all 5 steps](../e2e-artifacts/us-09-expanding-a-completed-run-shows-all-5-steps.png)
+![US-09: expanding a completed run shows all 5 steps](../artifacts/e2e/us-09-expanding-a-completed-run-shows-all-5-steps.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -387,13 +387,13 @@ VERDICT: 7/7 assertions proved
 ```
 </details>
 
-Video: [us-09-expanding-a-completed-run-shows-all-5-steps.webm](../e2e-artifacts/us-09-expanding-a-completed-run-shows-all-5-steps.webm)
+Video: [us-09-expanding-a-completed-run-shows-all-5-steps.webm](../artifacts/e2e/us-09-expanding-a-completed-run-shows-all-5-steps.webm)
 
-Trace: `pnpm exec playwright show-trace e2e-artifacts/us-09-expanding-a-completed-run-shows-all-5-steps-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/e2e/us-09-expanding-a-completed-run-shows-all-5-steps-trace.zip`
 
 ### ✅ US-10: clearing history empties the run list
 
-![US-10: clearing history empties the run list](../e2e-artifacts/us-10-clearing-history-empties-the-run-list.png)
+![US-10: clearing history empties the run list](../artifacts/e2e/us-10-clearing-history-empties-the-run-list.png)
 
 <details><summary>Proof Chain + API Log</summary>
 
@@ -424,6 +424,6 @@ VERDICT: 3/3 assertions proved
 ```
 </details>
 
-Video: [us-10-clearing-history-empties-the-run-list.webm](../e2e-artifacts/us-10-clearing-history-empties-the-run-list.webm)
+Video: [us-10-clearing-history-empties-the-run-list.webm](../artifacts/e2e/us-10-clearing-history-empties-the-run-list.webm)
 
-Trace: `pnpm exec playwright show-trace e2e-artifacts/us-10-clearing-history-empties-the-run-list-trace.zip`
+Trace: `pnpm exec playwright show-trace artifacts/e2e/us-10-clearing-history-empties-the-run-list-trace.zip`
