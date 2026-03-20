@@ -84,7 +84,10 @@ export default function TransactionsPage() {
   const [cases, setCases] = useState<Case[]>([]);
   const [selectedCaseId, setSelectedCaseId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(false);
 
   // Filter state
   const [searchTerm, setSearchTerm] = useState("");
@@ -116,16 +119,35 @@ export default function TransactionsPage() {
     }
   };
 
-  const fetchTransactions = async () => {
-    setIsLoading(true);
+  const fetchTransactions = async (cursor?: string) => {
+    const isAppending = !!cursor;
+    if (isAppending) {
+      setIsLoadingMore(true);
+    } else {
+      setIsLoading(true);
+    }
+
     try {
-      const response = await fetch(`/api/transactions?caseId=${selectedCaseId}`);
-      const data = await response.json();
-      setTransactions(data);
+      const url = new URL("/api/transactions", window.location.origin);
+      url.searchParams.set("caseId", selectedCaseId);
+      url.searchParams.set("limit", "100");
+      if (cursor) url.searchParams.set("cursor", cursor);
+
+      const response = await fetch(url.toString());
+      const json = await response.json();
+
+      if (isAppending) {
+        setTransactions((prev) => [...prev, ...json.data]);
+      } else {
+        setTransactions(json.data);
+      }
+      setNextCursor(json.nextCursor);
+      setHasMore(json.hasMore);
     } catch (error) {
       console.error("Failed to fetch transactions:", error);
     } finally {
       setIsLoading(false);
+      setIsLoadingMore(false);
     }
   };
 
@@ -191,48 +213,58 @@ export default function TransactionsPage() {
     if (selectedIds.size === 0) return;
 
     try {
-      const promises = Array.from(selectedIds).map((id) =>
-        fetch(`/api/transactions/${id}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ isReviewed: true }),
-        })
-      );
+      await fetch("/api/transactions/bulk", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ids: Array.from(selectedIds),
+          updates: { isReviewed: true },
+        }),
+      });
 
-      await Promise.all(promises);
-      await fetchTransactions();
+      setTransactions((prev) =>
+        prev.map((t) =>
+          selectedIds.has(t.id) ? { ...t, isReviewed: true } : t
+        )
+      );
       setSelectedIds(new Set());
     } catch (error) {
       console.error("Failed to mark as reviewed:", error);
+      await fetchTransactions();
     }
   };
 
   const handleCategoryChange = async (transactionId: string, category: string) => {
+    setTransactions((prev) =>
+      prev.map((t) => (t.id === transactionId ? { ...t, category } : t))
+    );
+
     try {
       await fetch(`/api/transactions/${transactionId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ category }),
       });
-
-      // Refetch all transactions
-      await fetchTransactions();
     } catch (error) {
       console.error("Failed to update category:", error);
+      await fetchTransactions();
     }
   };
 
   const handleToggleReviewed = async (transactionId: string, isReviewed: boolean) => {
+    setTransactions((prev) =>
+      prev.map((t) => (t.id === transactionId ? { ...t, isReviewed } : t))
+    );
+
     try {
       await fetch(`/api/transactions/${transactionId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isReviewed }),
       });
-
-      await fetchTransactions();
     } catch (error) {
       console.error("Failed to toggle reviewed:", error);
+      await fetchTransactions();
     }
   };
 
@@ -309,7 +341,7 @@ export default function TransactionsPage() {
             </SelectContent>
           </Select>
 
-          <Button variant="outline" size="icon" onClick={fetchTransactions}>
+          <Button variant="outline" size="icon" onClick={() => fetchTransactions()}>
             <RefreshCw className="h-4 w-4" />
           </Button>
         </div>
@@ -322,7 +354,7 @@ export default function TransactionsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500">Total</p>
-                <p className="text-2xl font-bold">{stats.total}</p>
+                <p className="text-2xl font-bold" data-testid="stat-total">{stats.total}</p>
               </div>
               <div className="text-gray-400">
                 <Filter className="h-8 w-8" />
@@ -336,7 +368,7 @@ export default function TransactionsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500">Reviewed</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-2xl font-bold text-green-600" data-testid="stat-reviewed">
                   {stats.reviewed}
                 </p>
               </div>
@@ -485,7 +517,7 @@ export default function TransactionsPage() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full" data-testid="transactions-table">
                 <thead>
                   <tr className="border-b">
                     <th className="pb-3 text-left">
@@ -521,6 +553,8 @@ export default function TransactionsPage() {
                   {filteredTransactions.map((transaction) => (
                     <tr
                       key={transaction.id}
+                      data-testid="transaction-row"
+                      data-reviewed={transaction.isReviewed}
                       className={cn(
                         "border-b last:border-0 hover:bg-gray-50",
                         transaction.isFlagged && "bg-red-50 hover:bg-red-100"
@@ -618,6 +652,25 @@ export default function TransactionsPage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          )}
+
+          {hasMore && (
+            <div className="flex justify-center pt-4">
+              <Button
+                variant="outline"
+                onClick={() => fetchTransactions(nextCursor!)}
+                disabled={isLoadingMore}
+              >
+                {isLoadingMore ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                    Loading...
+                  </>
+                ) : (
+                  "Load More"
+                )}
+              </Button>
             </div>
           )}
         </CardContent>
