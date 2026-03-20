@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { CheckCircle2, XCircle, RefreshCw, Clock, AlertCircle } from 'lucide-react';
 
 export type WorkflowStepProps = {
