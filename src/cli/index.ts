@@ -1,19 +1,19 @@
 #!/usr/bin/env tsx
-import { executeCommand } from './commands';
+import { Command } from 'commander';
+import { registerCasesCommand } from './commands/cases';
+import { registerTransactionsCommand } from './commands/transactions';
+import { registerWorkflowCommand } from './commands/workflows';
 
-async function main() {
-  const args = process.argv.slice(2);
+const program = new Command()
+  .name('reap')
+  .description('REAP Medicaid case management CLI')
+  .version('1.0.0');
 
-  if (args.length === 0) {
-    args.push('help');
-  }
+registerCasesCommand(program);
+registerTransactionsCommand(program);
+registerWorkflowCommand(program);
 
-  const result = await executeCommand(args);
-  console.log(JSON.stringify(result, null, 2));
-  process.exit(result.ok ? 0 : 1);
-}
-
-main().catch((err) => {
+program.parseAsync(process.argv).catch((err) => {
   console.error(JSON.stringify({ ok: false, error: err.message }));
   process.exit(1);
 });
