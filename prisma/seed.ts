@@ -89,6 +89,7 @@ async function main() {
       residentName: 'John Smith',
       facilityName: 'Sunny Acres Nursing Home',
       status: CaseStatus.IN_PROGRESS,
+      ownerId: 'admin@example.com',
     },
   });
 
@@ -97,6 +98,7 @@ async function main() {
       residentName: 'Mary Johnson',
       facilityName: 'Sunny Acres Nursing Home',
       status: CaseStatus.DRAFT,
+      ownerId: 'admin@example.com',
     },
   });
 
