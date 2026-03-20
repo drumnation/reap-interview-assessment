@@ -85,6 +85,8 @@ export default function TransactionsPage() {
   const [selectedCaseId, setSelectedCaseId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isBulkReviewing, setIsBulkReviewing] = useState(false);
+  const [pendingIds, setPendingIds] = useState<Set<string>>(new Set());
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
@@ -212,6 +214,7 @@ export default function TransactionsPage() {
   const handleBulkMarkReviewed = async () => {
     if (selectedIds.size === 0) return;
 
+    setIsBulkReviewing(true);
     try {
       await fetch("/api/transactions/bulk", {
         method: "PATCH",
@@ -231,10 +234,13 @@ export default function TransactionsPage() {
     } catch (error) {
       console.error("Failed to mark as reviewed:", error);
       await fetchTransactions();
+    } finally {
+      setIsBulkReviewing(false);
     }
   };
 
   const handleCategoryChange = async (transactionId: string, category: string) => {
+    setPendingIds((prev) => new Set([...prev, transactionId]));
     setTransactions((prev) =>
       prev.map((t) => (t.id === transactionId ? { ...t, category } : t))
     );
@@ -248,10 +254,13 @@ export default function TransactionsPage() {
     } catch (error) {
       console.error("Failed to update category:", error);
       await fetchTransactions();
+    } finally {
+      setPendingIds((prev) => { const next = new Set(prev); next.delete(transactionId); return next; });
     }
   };
 
   const handleToggleReviewed = async (transactionId: string, isReviewed: boolean) => {
+    setPendingIds((prev) => new Set([...prev, transactionId]));
     setTransactions((prev) =>
       prev.map((t) => (t.id === transactionId ? { ...t, isReviewed } : t))
     );
@@ -265,6 +274,8 @@ export default function TransactionsPage() {
     } catch (error) {
       console.error("Failed to toggle reviewed:", error);
       await fetchTransactions();
+    } finally {
+      setPendingIds((prev) => { const next = new Set(prev); next.delete(transactionId); return next; });
     }
   };
 
@@ -482,9 +493,18 @@ export default function TransactionsPage() {
 
             <div className="flex items-center gap-2 ml-auto">
               {selectedIds.size > 0 && (
-                <Button onClick={handleBulkMarkReviewed} variant="success" size="sm">
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  Mark {selectedIds.size} Reviewed
+                <Button onClick={handleBulkMarkReviewed} variant="success" size="sm" disabled={isBulkReviewing}>
+                  {isBulkReviewing ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                      Reviewing...
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="h-4 w-4 mr-1" />
+                      Mark {selectedIds.size} Reviewed
+                    </>
+                  )}
                 </Button>
               )}
 
@@ -638,6 +658,7 @@ export default function TransactionsPage() {
                         <Button
                           variant={transaction.isReviewed ? "ghost" : "outline"}
                           size="sm"
+                          disabled={pendingIds.has(transaction.id)}
                           onClick={() =>
                             handleToggleReviewed(
                               transaction.id,
@@ -645,7 +666,11 @@ export default function TransactionsPage() {
                             )
                           }
                         >
-                          {transaction.isReviewed ? "Unreview" : "Review"}
+                          {pendingIds.has(transaction.id) ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            transaction.isReviewed ? "Unreview" : "Review"
+                          )}
                         </Button>
                       </td>
                     </tr>
