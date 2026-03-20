@@ -151,7 +151,7 @@ function main() {
       '',
       ...(r.screenshot ? [`![${r.title}](../e2e-artifacts/${r.screenshot})`, ''] : []),
       ...(r.evidence ? [
-        '<details><summary>API Evidence Log</summary>',
+        '<details><summary>Proof Chain + API Log</summary>',
         '',
         '```',
         r.evidence,
