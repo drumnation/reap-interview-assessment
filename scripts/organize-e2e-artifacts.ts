@@ -24,6 +24,7 @@ interface Attachment {
   name: string;
   contentType: string;
   path?: string;
+  body?: string;
 }
 
 interface TestResult {
@@ -57,6 +58,7 @@ interface Row {
   title: string;
   status: string;
   duration: number;
+  evidence?: string;
   video?: string;
   screenshot?: string;
   trace?: string;
@@ -95,6 +97,12 @@ function main() {
     const row: Row = { slug, title: spec.title, status: result.status, duration: result.duration };
 
     for (const att of result.attachments) {
+      // Text evidence uses body (base64), file attachments use path
+      if (att.name === 'api-evidence' && att.body) {
+        row.evidence = Buffer.from(att.body, 'base64').toString('utf-8');
+        continue;
+      }
+
       if (!att.path || !fs.existsSync(att.path)) continue;
       const ext = path.extname(att.path);
 
@@ -142,6 +150,15 @@ function main() {
       `### ${icon(r.status)} ${r.title}`,
       '',
       ...(r.screenshot ? [`![${r.title}](../e2e-artifacts/${r.screenshot})`, ''] : []),
+      ...(r.evidence ? [
+        '<details><summary>API Evidence Log</summary>',
+        '',
+        '```',
+        r.evidence,
+        '```',
+        '</details>',
+        '',
+      ] : []),
       ...(r.video ? [`Video: [${r.video}](../e2e-artifacts/${r.video})`, ''] : []),
       ...(r.trace ? [`Trace: \`pnpm exec playwright show-trace e2e-artifacts/${r.trace}\``, ''] : []),
     ]),
