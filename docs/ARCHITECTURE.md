@@ -148,6 +148,33 @@ app/
 
 UI primitives in `src/components/ui/`: Badge, Button, Card, Checkbox, Input, Progress, Select, Tabs — all Radix-based, shadcn-style.
 
+Extracted domain components in `src/components/ui/`:
+- `TransactionRow` — single transaction table row with review toggle, category badge, flag indicator
+- `WorkflowStep` — single workflow step with status icon, duration, error display
+- `WorkflowStats` — stats card grid (total, completed, failed, success rate)
+
+## Storybook
+
+Component documentation at `pnpm storybook` (port 6006).
+
+| Story | Component | What it documents |
+|-------|-----------|-------------------|
+| Badge/AllVariants | Badge | All 6 variants with transaction domain labels |
+| TransactionRow/* | TransactionRow | Default, Reviewed, Flagged, FlaggedAndReviewed states |
+| WorkflowStep/* | WorkflowStep | All 5 step statuses (Completed, Failed, Running, Pending, Skipped) |
+| WorkflowSuccessRate/* | WorkflowStats | Before/after comparison (0% → 90% success rate) |
+
+Storybook E2E tests verify all stories render with correct content. Report: `docs/STORYBOOK-RESULTS.md`.
+
+## Testing Strategy
+
+| Layer | Command | Count | What it tests |
+|-------|---------|-------|---------------|
+| Unit | `pnpm test` | 44 | API routes (mocked Prisma), workflow steps, CLI commands |
+| E2E (app) | `pnpm test:e2e` | 10 | Bug fixes work in the real app with auth + network evidence |
+| E2E (storybook) | `pnpm test:storybook` | 7 | Components render correctly in isolation |
+| CLI | `pnpm cli` | — | Agent-accessible backend operations |
+
 ## Security Architecture
 
 ### Request Flow

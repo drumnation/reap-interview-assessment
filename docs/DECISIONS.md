@@ -180,3 +180,30 @@
 - No limits: Acceptable for a demo but bad practice for PHI data
 
 **Files changed**: `src/app/api/transactions/[id]/route.ts`
+
+## D014: Extract Domain Components for Storybook
+
+**Decision**: Extract `TransactionRow`, `WorkflowStep`, and `WorkflowStats` from page components into standalone `src/components/ui/` files.
+
+**Context**: The original page components (`transactions/page.tsx`, `workflows/page.tsx`) rendered everything inline — 650+ line files with no reusable pieces. Storybook requires importable components to document.
+
+**Alternatives**:
+- Story inline components (define in story file): Causes Vite dynamic import failures in Storybook v10 — the framework can't chunk-split inline definitions
+- Test against the full page: Would require full app context (auth, routing, data fetching) just to see a badge variant
+
+**Trade-off**: The extracted components duplicate some logic from the page components. The pages still render their own versions. In a production codebase, the pages would import the extracted components — but that refactor would change the existing code beyond what the assessment asked for.
+
+**Files changed**: `src/components/ui/transaction-row.tsx`, `src/components/ui/workflow-step.tsx`, `src/components/ui/workflow-stats.tsx`
+
+## D015: Storybook E2E Tests with Proof Chains
+
+**Decision**: Write Playwright E2E tests against the static Storybook build, not just visual snapshots.
+
+**Context**: Storybook alone proves "the component can render." It doesn't prove "the component renders the right content." The Storybook E2E tests navigate to each story iframe and assert specific text, DOM structure, and interaction behavior — the same proof chain system used for app E2E tests.
+
+**Alternatives**:
+- Visual regression (Chromatic): Better for catching unintended visual changes, but doesn't assert on content
+- Storybook interaction tests only (play functions): Limited to component internals, can't verify what's visible to the user
+- No Storybook tests: Leaves component documentation unverified
+
+**Files changed**: `e2e/storybook.spec.ts`, `playwright.storybook.config.ts`, `docs/STORYBOOK-RESULTS.md`
