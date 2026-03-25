@@ -51,9 +51,3 @@ uploads/
 # IDE
 .idea/
 .vscode/
-
-# Brain garden
-CLAUDE.md
-_errors/
-_logs/
-vitest.shims.d.ts

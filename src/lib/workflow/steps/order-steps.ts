@@ -18,23 +18,17 @@ export interface OrderContext extends Record<string, unknown> {
  * Checks that the order data is complete and valid
  */
 export async function validateOrderStep(context: OrderContext): Promise<StepResult> {
-  // Simulate some processing time
   await sleep(100);
 
-  if (!context.orderId) {
-    return { success: false, error: 'Order ID is required' };
-  }
+  const validations: [boolean, string][] = [
+    [!context.orderId, 'Order ID is required'],
+    [!context.customerId, 'Customer ID is required'],
+    [!context.items || context.items.length === 0, 'Order must contain at least one item'],
+    [context.totalAmount <= 0, 'Total amount must be positive'],
+  ];
 
-  if (!context.customerId) {
-    return { success: false, error: 'Customer ID is required' };
-  }
-
-  if (!context.items || context.items.length === 0) {
-    return { success: false, error: 'Order must contain at least one item' };
-  }
-
-  if (context.totalAmount <= 0) {
-    return { success: false, error: 'Total amount must be positive' };
+  for (const [invalid, error] of validations) {
+    if (invalid) return { success: false, error };
   }
 
   return {
@@ -79,7 +73,7 @@ export async function processPaymentStep(context: OrderContext): Promise<StepRes
 
   const paymentResult = await simulatePaymentGateway(context.totalAmount, context.customerId);
 
-  if (!paymentResult.success) {
+  if (paymentResult.success) {
     return {
       success: true,
       data: {
@@ -110,7 +104,7 @@ export async function createShipmentStep(context: OrderContext): Promise<StepRes
     };
   }
 
-  const shipmentId = `SHIP-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  const shipmentId = `SHIP-${Date.now()}-${crypto.randomUUID().substring(0, 8)}`;
 
   return {
     success: true,
