@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, LogIn } from "lucide-react";
 
 function safeCallbackUrl(raw: string | null): string {
   if (!raw || !raw.startsWith("/") || raw.startsWith("//")) return "/";
@@ -45,21 +45,36 @@ export function SignInForm() {
   }
 
   return (
-    <main className="container mx-auto px-4 py-12 max-w-md">
-      <Link
-        href="/"
-        className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-8"
-      >
-        <ArrowLeft className="h-4 w-4 mr-1" />
-        Back to home
-      </Link>
+    <main className="container mx-auto px-4 py-8 max-w-md text-gray-900 [color-scheme:light]">
+      <div className="mb-6">
+        <Link
+          href="/"
+          className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+        >
+          <ArrowLeft className="h-4 w-4 mr-1" />
+          Back to Home
+        </Link>
+      </div>
 
-      <Card>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900">Sign in</h1>
+        <p className="text-gray-600 mt-1">
+          Use the demo username and password from your <code className="bg-gray-200 px-1 rounded text-gray-800 text-sm">.env</code> file.
+        </p>
+      </div>
+
+      <Card className="hover:shadow-lg transition-shadow">
         <CardHeader>
-          <CardTitle>Sign in</CardTitle>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <LogIn className="h-6 w-6 text-blue-600" />
+            </div>
+            <CardTitle className="text-gray-900">Credentials</CardTitle>
+          </div>
           <CardDescription>
-            Demo credentials are set via <code className="text-xs">TEST_USERNAME</code> and{" "}
-            <code className="text-xs">TEST_PASSWORD</code> in your environment.
+            Must match{" "}
+            <code className="bg-gray-200 px-1 rounded text-gray-800">TEST_USERNAME</code> and{" "}
+            <code className="bg-gray-200 px-1 rounded text-gray-800">TEST_PASSWORD</code>.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -75,6 +90,7 @@ export function SignInForm() {
                 autoComplete="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                className="bg-white text-gray-900"
                 required
               />
             </div>
@@ -89,6 +105,7 @@ export function SignInForm() {
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="bg-white text-gray-900"
                 required
               />
             </div>
