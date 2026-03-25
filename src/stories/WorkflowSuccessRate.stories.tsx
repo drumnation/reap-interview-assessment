@@ -30,6 +30,14 @@ export const AfterFixes: Story = {
 };
 
 export const Comparison: Story = {
+  // Satisfies Storybook CSF typing when using custom `render` (args unused).
+  args: {
+    label: 'Comparison',
+    total: 10,
+    completed: 0,
+    failed: 0,
+    successRate: 0,
+  },
   render: () => (
     <div className="space-y-8">
       <WorkflowStats
